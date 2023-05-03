@@ -9,7 +9,6 @@ export const HEROS: Hero[] = [
   { id: 6, name: 'jester' },
 ];
 
-
 // export const HEROS: Hero[] = [
 //   { id: 1, name: 'Yi Sang' },
 //   { id: 2, name: 'Faust' },
@@ -24,4 +23,3 @@ export const HEROS: Hero[] = [
 //   { id: 12, name: 'Outis' },
 //   { id: 13, name: 'Gregor' },
 // ];
-

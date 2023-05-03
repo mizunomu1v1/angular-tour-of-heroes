@@ -1,0 +1,17 @@
+{
+  "printWidth": 100,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "endOfLine": "lf",
+  "importOrder": [
+    "^@angular/(.*)$",
+    "^primeng/(.*)$",
+    "<THIRD_PARTY_MODULES>",
+    "^@global/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"],
+  "importOrderSortSpecifiers": true}
