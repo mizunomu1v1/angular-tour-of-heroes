@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
@@ -10,18 +11,36 @@ import { HEROS } from './mock-heros';
   providedIn: 'root',
 })
 export class HeroService {
-  // サービス内でサービスを利用する
-  constructor(private messageService: MessageService) {}
+  private heroesUrl = 'api/heroes';
 
+  // サービス内でサービスを利用する
+  constructor(private http: HttpClient, private messageService: MessageService) {}
+
+  /**
+   * HeroServiceのメッセージをMessageServiceを使って記録する
+   * @returns message - メッセージ
+   */ private log(message: string) {
+    this.messageService.add(`HeroService: ${message}`);
+  }
+
+  /**
+   * 全てのヒーローを取得する関数
+   * @returns heroes - ヒーローの配列
+   */
   getHeroes(): Observable<Hero[]> {
-    const heroes = of(HEROS);
-    this.messageService.add('HeroService: fetched heroes');
+    const heroes = this.http.get<Hero[]>(this.heroesUrl);
+    this.log(`fetched heroes`);
     return heroes;
   }
 
+  /**
+   * ヒーローを取得する関数
+   * @param id - ヒーローID
+   * @returns hero - ヒーロー
+   */
   getHero(id: number): Observable<Hero> {
     const hero = HEROS.find((hero) => hero.id === id)!;
-    this.messageService.add(`HeroService: fetched heroId = ${id}`);
+    this.log(`fetched heroId = ${id}`);
     return of(hero);
   }
 }
