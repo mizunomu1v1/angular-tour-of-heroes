@@ -13,13 +13,17 @@ import { HEROS } from './mock-heros';
 })
 export class HeroService {
   private heroesUrl = 'api/heroes';
+  // HTTPの保存リクエスト保存時のヘッダー
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  };
 
   // サービス内でサービスを利用する
   constructor(private http: HttpClient, private messageService: MessageService) {}
 
   /**
    * HeroServiceのメッセージをMessageServiceを使って記録する
-   * @returns message - メッセージ
+   * @param message - メッセージ
    */
   private log(message: string) {
     this.messageService.add(`HeroService: ${message}`);
@@ -44,12 +48,12 @@ export class HeroService {
 
   /**
    * 全てのヒーローを取得する関数
-   * @returns heroes - ヒーローの配列
+   * @returns Observable<Hero[]>
    */
   getHeroes(): Observable<Hero[]> {
     const heroes = this.http.get<Hero[]>(this.heroesUrl).pipe(
       tap(() => this.log(`fetched heroes`)),
-      // 戻り値のOperatorFunctionはObservable を返す関数
+      // 戻り値のOperatorFunctionはObservableを返す関数
       catchError(
         // エラー用にメッセージと空配列を渡す
         this.handleError<Hero[]>('getHeroes', [])
@@ -59,13 +63,27 @@ export class HeroService {
   }
 
   /**
-   * ヒーローを取得する関数
+   * idからヒーローを取得する関数
    * @param id - ヒーローID
-   * @returns hero - ヒーロー
+   * @returns  Observable<Hero>
    */
   getHero(id: number): Observable<Hero> {
-    const hero = HEROS.find((hero) => hero.id === id)!;
-    this.log(`fetched heroId = ${id}`);
-    return of(hero);
+    const url = `${this.heroesUrl}/${id}`;
+    return this.http.get<Hero>(url).pipe(
+      tap(() => this.log(`fetched heroId = ${id}`)),
+      catchError(this.handleError<Hero>(`getHero id=${id} `))
+    );
+  }
+
+  /**
+   * ヒーローを更新する関数
+   * @param hero - ヒーロー
+   * @returns  Observable<Object>
+   */
+  updateHero(hero: Hero): Observable<Object> {
+    return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+      tap(() => this.log(`updated hero id = ${hero.id}`)),
+      catchError(this.handleError<Object>(`updateHero`))
+    );
   }
 }

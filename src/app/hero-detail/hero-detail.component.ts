@@ -11,8 +11,10 @@ import { HeroService } from '../hero.service';
   styleUrls: ['./hero-detail.component.css'],
 })
 export class HeroDetailComponent implements OnInit {
-  // バインドされないので@Inputは不要
-  hero?: Hero;
+  public hero: Hero = {
+    name: '',
+    id: 0,
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -27,6 +29,10 @@ export class HeroDetailComponent implements OnInit {
   getHero() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.heroService.getHero(id).subscribe((hero) => (this.hero = hero));
+  }
+
+  save() {
+    this.heroService.updateHero(this.hero).subscribe(() => this.goBack());
   }
 
   goBack() {

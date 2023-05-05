@@ -17,7 +17,7 @@ export class InMemoryDataService implements InMemoryDbService {
       { id: 5, name: 'witch' },
       { id: 6, name: 'jester' },
     ];
-    return { heroes: heroes };
+    return { heroes };
   }
 
   // 配列が空ならIDに初期値11をセット、それ以外は新規ID採番
